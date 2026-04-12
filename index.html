@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>San Antonio</title>
+  <link rel="manifest" href="manifest.json?v=5">
+  <link rel="icon" type="image/png" href="icon-512x512.png?v=5">
+  <link rel="apple-touch-icon" href="icon-512x512.png?v=5">
+  
+  <meta name="theme-color" content="#800000">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <style>
+    body {
+      background-color: #800000;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    #splash-logo {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 20%;
+      background-color: white;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+  </style>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('pwabuilder-sw.js').catch(err => console.log("SW Skip"));
+    }
+
+    // After 3 seconds, we "hand over" the user to the real site
+    setTimeout(function() {
+      window.location.replace("https://my.flexgift.com/Account/Login?ReturnUrl=%2fCard%2fInfo");
+    }, 3000); 
+  </script>
+</head>
+<body>
+
+  <img src="icon-512x512.png" id="splash-logo" alt="San Antonio Logo">
+
+</body>
+</html>

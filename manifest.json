@@ -1,0 +1,19 @@
+{
+  "name": "San Antonio Mexican Restaurant",
+  "short_name": "San Antonio",
+  "description": "Gift Card and Loyalty Portal",
+  "lang": "en-US",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "theme_color": "#800000",
+  "background_color": "#800000",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
