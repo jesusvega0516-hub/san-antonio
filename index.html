@@ -1,50 +1,63 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>San Antonio</title>
-  <link rel="manifest" href="manifest.json?v=5">
+  
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#800000">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  
   <link rel="icon" type="image/png" href="chicken-app.png">
   <link rel="apple-touch-icon" href="chicken-app.png">
-  
-  <meta name="theme-color" content="#800000">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
   <style>
-    body {
-      background-color: #800000;
+    body, html {
       margin: 0;
       padding: 0;
-      overflow: hidden;
+      width: 100%;
+      height: 100%;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      background-color: #800000; /* Burgundy */
+      overflow: hidden;
+      font-family: sans-serif;
     }
-
+    #splash-container {
+      text-align: center;
+    }
     #splash-logo {
-      width: 120px;
-      height: 120px;
-      object-fit: cover;
-      border-radius: 20%;
-      background-color: white;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      width: 150px;
+      height: auto;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 0.8; }
+      50% { transform: scale(1.05); opacity: 1; }
+      100% { transform: scale(1); opacity: 0.8; }
     }
   </style>
-
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('pwabuilder-sw.js').catch(err => console.log("SW Skip"));
-    }
-
-    // After 3 seconds, we "hand over" the user to the real site
-    setTimeout(function() {
-      window.location.replace("https://my.flexgift.com/Account/Login?ReturnUrl=%2fCard%2fInfo");
-    }, 3000); 
-  </script>
 </head>
 <body>
 
-  <img src="chicken-app.png" id="splash-logo" alt="San Antonio Logo">
+  <div id="splash-container">
+    <img src="chicken-app.png" id="splash-logo" alt="San Antonio Logo">
+  </div>
+
+  <script>
+    // Register the Service Worker for PWA installation
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('pwabuilder-sw.js');
+    }
+
+    // The 3-second redirect to Flexgift
+    setTimeout(function() {
+      window.location.href = "https://my.flexgift.com/Account/Login?ReturnUrl=%2fCard%2fInfo";
+    }, 3000);
+  </script>
 
 </body>
 </html>
