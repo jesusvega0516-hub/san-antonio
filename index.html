@@ -71,13 +71,38 @@
             <h2 id="questionText">¿Qué te gustaría hacer?</h2>
         </div>
 
-        <div class="menu-container" id="menu-box">
+      <div class="menu-container" id="menu-box">
             <a href="special.html" class="btn btn-special">🔥 Ver Especial del Día</a>
             <a href="https://my.flexgift.com/Account/Login" class="btn">💳 Mi Saldo de Regalo</a>
+            
+            <button id="installBtn" class="btn" style="display:none; background-color: rgba(255,255,255,0.2); color: white; border: 1px solid white; margin-top: 10px; font-size: 14px;">
+                📲 Instalar App en mi Celular
+            </button>
         </div>
     </div>
 
     <script>
+        let deferredPrompt;
+        const installBtn = document.getElementById('installBtn');
+
+        // 1. Trap the default browser prompt
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            installBtn.style.display = 'block'; // Only shows button if installable
+        });
+
+        // 2. Handle the custom button click
+        installBtn.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') installBtn.style.display = 'none';
+                deferredPrompt = null;
+            }
+        });
+
+        // 3. Your existing Animation Logic
         window.onload = () => {
             setTimeout(() => {
                 document.getElementById('header').classList.add('moved');
@@ -87,6 +112,11 @@
                 }, 500);
             }, 1200);
         };
+
+        // Service Worker registration
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('pwabuilder-sw.js');
+        }
     </script>
 </body>
 </html>
