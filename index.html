@@ -7,49 +7,45 @@
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#800000">
     <style>
-        body, html {
-            margin: 0; padding: 0; width: 100%; height: 100%;
-            background-color: #800000; font-family: 'Segoe UI', Roboto, sans-serif;
-            color: white; display: flex; flex-direction: column; align-items: center;
-        }
-        #header {
-            margin-top: 50px; text-align: center;
-            transition: all 0.5s ease;
-        }
-        #splash-logo {
-            width: 120px; height: auto; margin-bottom: 20px;
-        }
-        h2 { font-weight: 300; margin-bottom: 40px; }
-        .menu-container {
-            width: 85%; max-width: 400px; display: flex; flex-direction: column; gap: 20px;
-        }
-        .btn {
-            background-color: white; color: #800000; border: none;
-            padding: 20px; border-radius: 12px; font-size: 18px; font-weight: bold;
-            text-align: center; text-decoration: none; cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: transform 0.2s;
-        }
-        .btn:active { transform: scale(0.95); }
-        .btn-special { background-color: #FFD700; color: #333; } /* Gold for Specials */
-    </style>
-</head>
-<body>
+    /* ... keep your existing styles, but add these ... */
+    #header {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    #header.moved {
+        top: 15%; /* Moves logo up */
+    }
+    .menu-container {
+        margin-top: 150px;
+        opacity: 0; /* Hidden at start */
+        transition: opacity 1s ease;
+    }
+    .menu-container.visible {
+        opacity: 1; /* Fades in */
+    }
+</style>
 
-    <div id="header">
+<body>
+    <div id="header" id="header-box">
         <img src="chicken-app.png" id="splash-logo" alt="Logo">
-        <h2>How can we help you?</h2>
+        <h2 id="questionText" style="display:none;">¿Qué te gustaría hacer?</h2>
     </div>
 
-    <div class="menu-container">
-        <a href="special.html" class="btn btn-special">🔥 View Today's Special</a>
-        
-        <a href="https://my.flexgift.com/Account/Login?ReturnUrl=%2fCard%2fInfo" class="btn">💳 Check Gift Card Balance</a>
+    <div class="menu-container" id="menu-box">
+        <a href="special.html" class="btn btn-special">🔥 Ver Especial del Día</a>
+        <a href="https://my.flexgift.com/Account/Login" class="btn">💳 Mi Saldo de Regalo</a>
     </div>
 
     <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('pwabuilder-sw.js');
-        }
+        // This timer creates the "Splash Screen" effect
+        setTimeout(() => {
+            document.getElementById('header').classList.add('moved');
+            document.getElementById('menu-box').classList.add('visible');
+            document.getElementById('questionText').style.display = 'block';
+        }, 1500); // 1.5 seconds of splash time
     </script>
 </body>
 </html>
