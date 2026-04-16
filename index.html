@@ -7,111 +7,86 @@
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#800000">
     <style>
-        /* Force the background color on everything */
+        * { box-sizing: border-box; }
         html, body {
+            margin: 0; padding: 0; 
+            width: 100vw; height: 100vh;
             background-color: #800000 !important;
-            margin: 0; padding: 0; width: 100%; height: 100%;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             color: white; overflow: hidden;
-            display: flex; justify-content: center; align-items: center;
+            position: fixed; /* Prevents scrolling/bouncing on mobile */
         }
-
+        #main-container {
+            position: relative;
+            width: 100%; height: 100%;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+        }
         #header {
             position: absolute;
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
             text-align: center;
-            transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
-            width: 90%;
+            transition: all 1s ease-in-out;
+            width: 100%;
             z-index: 10;
         }
-
-        /* This is the move-up position for mobile */
         #header.moved {
-            top: 18%;
+            top: 20%;
         }
-
         #splash-logo {
-            width: 180px; /* Controlled size for mobile */
-            max-width: 60%;
-            height: auto;
-            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3));
+            width: 160px; height: auto;
+            max-width: 50%;
+            display: block; margin: 0 auto;
         }
-
         h2 { 
-            opacity: 0; 
-            transition: opacity 0.8s; 
-            font-weight: 400;
-            margin-top: 15px;
-            font-size: 1.2rem;
+            opacity: 0; margin-top: 15px; font-size: 1.2rem;
+            transition: opacity 0.5s; font-weight: 400;
         }
-
         .menu-container {
-            position: absolute;
-            top: 55%; /* Positioned below the moved logo */
-            width: 85%;
-            max-width: 350px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 1s ease;
-            z-index: 5;
+            width: 85%; max-width: 320px;
+            display: flex; flex-direction: column; gap: 15px;
+            opacity: 0; transform: translateY(20px);
+            transition: all 0.8s ease;
+            margin-top: 120px; /* Space for the moved logo */
         }
-
         .menu-container.visible {
-            opacity: 1;
-            pointer-events: auto;
+            opacity: 1; transform: translateY(0);
         }
-
         .btn {
-            background-color: white;
-            color: #800000;
-            border: none;
-            padding: 18px;
-            border-radius: 15px;
-            font-size: 18px;
-            font-weight: bold;
-            text-align: center;
-            text-decoration: none;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-            display: block;
+            background-color: white; color: #800000; border: none;
+            padding: 18px; border-radius: 12px; font-size: 17px; font-weight: bold;
+            text-align: center; text-decoration: none;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            -webkit-tap-highlight-color: transparent;
         }
-
-        .btn-special {
-            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-            color: #333;
-        }
+        .btn-special { background: #FFD700; color: #333; }
     </style>
 </head>
 <body>
 
-    <div id="header">
-        <img src="chicken-app.png" id="splash-logo" alt="Logo">
-        <h2 id="questionText">¿Qué te gustaría hacer?</h2>
-    </div>
+    <div id="main-container">
+        <div id="header">
+            <img src="chicken-app.png" id="splash-logo" alt="Logo">
+            <h2 id="questionText">¿Qué te gustaría hacer?</h2>
+        </div>
 
-    <div class="menu-container" id="menu-box">
-        <a href="special.html" class="btn btn-special">🔥 Ver Especial del Día</a>
-        <a href="https://my.flexgift.com/Account/Login" class="btn">💳 Mi Saldo de Regalo</a>
+        <div class="menu-container" id="menu-box">
+            <a href="special.html" class="btn btn-special">🔥 Ver Especial del Día</a>
+            <a href="https://my.flexgift.com/Account/Login" class="btn">💳 Mi Saldo de Regalo</a>
+        </div>
     </div>
 
     <script>
-        // Use a slight delay to ensure the browser has rendered the burgundy background first
-        window.addEventListener('load', () => {
+        window.onload = () => {
             setTimeout(() => {
                 document.getElementById('header').classList.add('moved');
                 setTimeout(() => {
                     document.getElementById('menu-box').classList.add('visible');
                     document.getElementById('questionText').style.opacity = '1';
-                }, 400); // Buttons appear shortly after logo starts moving
-            }, 1800); // Time logo stays in center
-        });
-
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('pwabuilder-sw.js');
-        }
+                }, 500);
+            }, 1200);
+        };
     </script>
 </body>
 </html>
