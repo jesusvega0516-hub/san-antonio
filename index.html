@@ -34,11 +34,22 @@
         #header.moved {
             top: 20%;
         }
-        #splash-logo {
-            width: 160px; height: auto;
-            max-width: 50%;
-            display: block; margin: 0 auto;
-        }
+       #splash-logo {
+    width: 160px; 
+    height: 160px; /* Force a square aspect ratio for the squircle effect */
+    max-width: 50%;
+    display: block; 
+    margin: 0 auto;
+    
+    /* THE SQUIRCLE MAGIC */
+    border-radius: 22%; /* This creates the standard iOS-style squircle */
+    overflow: hidden;
+    object-fit: cover; /* Ensures the image fills the squircle perfectly */
+    
+    /* Prevents the 'messy' shift during animation */
+    backface-visibility: hidden;
+    -webkit-mask-image: -webkit-radial-gradient(white, black); /* Fixes a glitch in Safari/iOS */
+}
         h2 { 
             opacity: 0; margin-top: 15px; font-size: 1.2rem;
             transition: opacity 0.5s; font-weight: 400;
