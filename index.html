@@ -17,7 +17,7 @@
             position: fixed;
         }
 
-        /* Language Toggle Button */
+        /* Corner Language Toggle */
         #lang-toggle {
             position: absolute;
             top: 20px;
@@ -25,12 +25,14 @@
             background: rgba(255, 255, 255, 0.2);
             border: 1px solid rgba(255, 255, 255, 0.5);
             color: white;
-            padding: 8px 12px;
+            padding: 8px 14px;
             border-radius: 20px;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: bold;
             z-index: 100;
             cursor: pointer;
+            backdrop-filter: blur(5px);
+            -webkit-tap-highlight-color: transparent;
         }
 
         #main-container {
@@ -125,33 +127,35 @@
         <div class="menu-container" id="location-box" style="display:none; opacity:0;">
             <h3 style="text-align:center; margin-bottom:5px;" data-es="🛍️ Ordenar Online:" data-en="🛍️ Order Online:">🛍️ Ordenar Online:</h3>
             <a href="https://order.epipay.com/m4200000556620/en/WebOrder?STORE_CODE=MTAwMA==" target="_blank" class="btn">📍 Monroe</a>
-            <a href="#" class="btn">📍 Broadway</a>
-            <a href="#" class="btn">📍 Village</a>
+            <a href="#" class="btn" style="opacity: 0.5; pointer-events: none;">📍 Broadway</a>
+            <a href="#" class="btn" style="opacity: 0.5; pointer-events: none;">📍 Village</a>
             <button onclick="toggleMenu('menu-box')" class="back-link" data-es="Regresar al Menú Principal" data-en="Back to Main Menu">Regresar al Menú Principal</button>
         </div>
 
         <div class="menu-container" id="call-box" style="display:none; opacity:0;">
             <h3 style="text-align:center; margin-bottom:5px;" data-es="📞 Llamar a:" data-en="📞 Call:">📞 Llamar a:</h3>
-            <a href="tel:1234567890" class="btn">📍 Monroe</a>
-            <a href="tel:1234567890" class="btn">📍 Broadway</a>
-            <a href="tel:1234567890" class="btn">📍 Village</a>
+            <a href="tel:9736149666" class="btn">📍 Monroe</a>
+            <a href="tel:9732463996" class="btn">📍 Broadway</a>
+            <a href="tel:9732726950" class="btn">📍 Village</a>
             <button onclick="toggleMenu('menu-box')" class="back-link" data-es="Regresar al Menú Principal" data-en="Back to Main Menu">Regresar al Menú Principal</button>
         </div>
     </div>
 
     <script>
-        let currentLang = 'es';
+        let currentLang = localStorage.getItem('appLang') || 'es';
 
-        function changeLanguage() {
-            currentLang = currentLang === 'es' ? 'en' : 'es';
+        function applyLanguage() {
             const elements = document.querySelectorAll('[data-es]');
-            
             elements.forEach(el => {
                 el.innerText = el.getAttribute(`data-${currentLang}`);
             });
-            
-            // Update the toggle button text to show what you're switching to
             document.getElementById('lang-toggle').innerText = currentLang === 'es' ? 'EN / ES' : 'ES / EN';
+        }
+
+        function changeLanguage() {
+            currentLang = currentLang === 'es' ? 'en' : 'es';
+            localStorage.setItem('appLang', currentLang);
+            applyLanguage();
         }
 
         function toggleMenu(targetId) {
@@ -160,13 +164,17 @@
                 document.getElementById(id).style.display = 'none';
                 document.getElementById(id).style.opacity = '0';
             });
-
             const target = document.getElementById(targetId);
             target.style.display = 'flex';
             setTimeout(() => { target.style.opacity = '1'; }, 50);
         }
 
-        // Standard logic for Splash, Install, and Service Worker remains the same
+        // Initialize language on load
+        applyLanguage();
+
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+
         window.onload = () => {
             setTimeout(() => {
                 document.getElementById('header').classList.add('moved');
