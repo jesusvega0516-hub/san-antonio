@@ -71,28 +71,53 @@
             <h2 id="questionText">¿Qué te gustaría hacer?</h2>
         </div>
 
-      <div class="menu-container" id="menu-box">
+     <div class="menu-container" id="menu-box">
             <a href="special.html" class="btn btn-special">🔥 Ver Especial del Día</a>
+            <a href="#" class="btn" onclick="showLocations()">🛍️ Ordena en Línea</a>
             <a href="https://my.flexgift.com/Account/Login" class="btn">💳 Mi Saldo de Regalo</a>
             
             <button id="installBtn" class="btn" style="display:none; background-color: rgba(255,255,255,0.2); color: white; border: 1px solid white; margin-top: 10px; font-size: 14px;">
-                📲 Instalar App en mi Celular
+                📲 Instalar App
+            </button>
+        </div>
+
+        <div class="menu-container" id="location-box" style="display:none; opacity:0;">
+            <h3 style="text-align:center; margin-bottom:10px;">Selecciona Ubicación:</h3>
+            <a href="INSERT_MONROE_LINK_HERE" target="_blank" class="btn">📍 Monroe Location</a>
+            <a href="INSERT_BROADWAY_LINK_HERE" target="_blank" class="btn">📍 Broadway Location</a>
+            <a href="INSERT_VILLAGE_LINK_HERE" target="_blank" class="btn">📍 Village Location</a>
+            
+            <button onclick="showMainMenu()" style="background:none; border:none; color:white; text-decoration:underline; margin-top:10px; cursor:pointer;">
+                Regresar al Menú Principal
             </button>
         </div>
     </div>
 
     <script>
+        // TOGGLE MENUS
+        function showLocations() {
+            document.getElementById('menu-box').style.display = 'none';
+            const locBox = document.getElementById('location-box');
+            locBox.style.display = 'flex';
+            setTimeout(() => { locBox.style.opacity = '1'; }, 50);
+        }
+
+        function showMainMenu() {
+            document.getElementById('location-box').style.display = 'none';
+            document.getElementById('location-box').style.opacity = '0';
+            document.getElementById('menu-box').style.display = 'flex';
+        }
+
+        // INSTALL LOGIC
         let deferredPrompt;
         const installBtn = document.getElementById('installBtn');
 
-        // 1. Trap the default browser prompt
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
-            installBtn.style.display = 'block'; // Only shows button if installable
+            installBtn.style.display = 'block';
         });
 
-        // 2. Handle the custom button click
         installBtn.addEventListener('click', async () => {
             if (deferredPrompt) {
                 deferredPrompt.prompt();
@@ -102,7 +127,7 @@
             }
         });
 
-        // 3. Your existing Animation Logic
+        // ENTRANCE ANIMATION
         window.onload = () => {
             setTimeout(() => {
                 document.getElementById('header').classList.add('moved');
@@ -113,7 +138,6 @@
             }, 1200);
         };
 
-        // Service Worker registration
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('pwabuilder-sw.js');
         }
