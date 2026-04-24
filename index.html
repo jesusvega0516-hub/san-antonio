@@ -31,55 +31,51 @@
             width: 100%;
             z-index: 10;
         }
-        #header.moved { top: 20%; }
+        #header.moved { top: 18%; } /* Lifted slightly to make room for 4th button */
+        
         #splash-logo {
-            width: 160px; height: 160px; max-width: 50%;
+            width: 150px; height: 150px; max-width: 45%;
             display: block; margin: 0 auto;
             border-radius: 22%; overflow: hidden; object-fit: cover;
             backface-visibility: hidden;
             -webkit-mask-image: -webkit-radial-gradient(white, black);
         }
-        h2 { opacity: 0; margin-top: 15px; font-size: 1.2rem; transition: opacity 0.5s; font-weight: 400; }
+        h2 { opacity: 0; margin-top: 10px; font-size: 1.1rem; transition: opacity 0.5s; font-weight: 400; }
         
         .menu-container {
             width: 85%; max-width: 320px;
-            display: flex; flex-direction: column; gap: 15px;
+            display: flex; flex-direction: column; gap: 12px;
             opacity: 0; transform: translateY(20px);
-            transition: all 0.8s ease;
-            margin-top: 120px;
+            transition: all 0.6s ease;
+            margin-top: 130px;
         }
         .menu-container.visible { opacity: 1; transform: translateY(0); }
         
-        /* THE BUTTON STYLES */
         .btn {
             background-color: white; color: #800000; border: none;
-            padding: 18px; border-radius: 12px; font-size: 17px; font-weight: bold;
+            padding: 16px; border-radius: 12px; font-size: 16px; font-weight: bold;
             text-align: center; text-decoration: none;
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
             -webkit-tap-highlight-color: transparent;
             display: block;
         }
         .btn-special { background: #FFD700; color: #333; }
-        
-        /* NEW: Green Call Button Style */
-        .btn-call {
-            background-color: #28a745; color: white;
-            padding: 12px; border-radius: 10px; font-size: 15px;
-            margin-top: -8px; /* Tucks it under the location button */
-        }
+        /* Distinctive color for the Call main button */
+        .btn-call-main { background-color: #28a745; color: white; }
 
-        .location-group {
-            display: flex; flex-direction: column; gap: 12px;
-            margin-bottom: 5px;
+        .back-link {
+            background: none; border: none; color: white; 
+            text-decoration: underline; margin-top: 8px; cursor: pointer;
+            font-size: 14px;
         }
 
         #ios-instructions {
             display: none; background: rgba(255, 255, 255, 0.1);
             border: 1px dashed rgba(255, 255, 255, 0.5);
-            border-radius: 12px; padding: 15px; margin-top: 15px;
-            color: white; font-size: 14px; text-align: center;
+            border-radius: 12px; padding: 12px; margin-top: 10px;
+            color: white; font-size: 13px; text-align: center;
         }
-        .share-icon { display: inline-block; width: 20px; vertical-align: middle; margin: 0 5px; }
+        .share-icon { display: inline-block; width: 18px; vertical-align: middle; margin: 0 3px; }
     </style>
 </head>
 <body>
@@ -92,56 +88,51 @@
 
         <div class="menu-container" id="menu-box">
             <a href="special.html" class="btn btn-special">🔥 Ver Especial del Día</a>
-            <a href="#" class="btn" onclick="showLocations()">🛍️ Ordena en Línea</a>
+            <a href="#" class="btn" onclick="toggleMenu('location-box')">🛍️ Ordena en Línea</a>
             <a href="https://my.flexgift.com/Account/Login" class="btn">💳 Mi Saldo de Regalo</a>
+            <a href="#" class="btn btn-call-main" onclick="toggleMenu('call-box')">📞 Llamar al Restaurante</a>
             
-            <button id="installBtn" class="btn" style="display:none; background-color: rgba(255,255,255,0.2); color: white; border: 1px solid white; margin-top: 10px; font-size: 14px;">
+            <button id="installBtn" class="btn" style="display:none; background-color: rgba(255,255,255,0.2); color: white; border: 1px solid white; margin-top: 5px; font-size: 13px;">
                 📲 Instalar App
             </button>
 
             <div id="ios-instructions">
-                Para instalar en iPhone:<br>
-                Pulsa el icono <img src="https://upload.wikimedia.org/wikipedia/commons/d/d5/Ios_share_icon.png" class="share-icon"> y luego <br>
-                <strong>"Agregar al inicio"</strong>
+                Instalar en iPhone: Pulsa <img src="https://upload.wikimedia.org/wikipedia/commons/d/d5/Ios_share_icon.png" class="share-icon"> y luego <strong>"Agregar al inicio"</strong>
             </div>
         </div>
 
         <div class="menu-container" id="location-box" style="display:none; opacity:0;">
-            <h3 style="text-align:center; margin-bottom:10px;">Selecciona Ubicación:</h3>
-            
-            <div class="location-group">
-                <a href="https://order.epipay.com/m4200000556620/en/WebOrder?STORE_CODE=MTAwMA==" target="_blank" class="btn">📍 Monroe Location</a>
-                <a href="tel:9736149666" class="btn btn-call">📞 Llamar a Monroe</a>
-            </div>
+            <h3 style="text-align:center; margin-bottom:5px;">🛍️ Ordenar Online:</h3>
+            <a href="https://order.epipay.com/m4200000556620/en/WebOrder?STORE_CODE=MTAwMA==" target="_blank" class="btn">📍 Monroe</a>
+            <a href="#" class="btn" style="opacity: 0.5; pointer-events: none;">📍 Broadway</a>
+            <a href="#" class="btn" style="opacity: 0.5; pointer-events: none;">📍 Village</a>
+            <button onclick="toggleMenu('menu-box')" class="back-link">Regresar al Menú Principal</button>
+        </div>
 
-            <div class="location-group" style="opacity: 0.5; pointer-events: none;">
-                <a href="#" class="btn">📍 Broadway</a>
-                <a href="#" class="btn btn-call">📞 Llamar</a>
-            </div>
-
-            <div class="location-group" style="opacity: 0.5; pointer-events: none;">
-                <a href="#" class="btn">📍 Village</a>
-                <a href="#" class="btn btn-call">📞 Llamar</a>
-            </div>
-            
-            <button onclick="showMainMenu()" style="background:none; border:none; color:white; text-decoration:underline; margin-top:10px; cursor:pointer;">
-                Regresar al Menú Principal
-            </button>
+        <div class="menu-container" id="call-box" style="display:none; opacity:0;">
+            <h3 style="text-align:center; margin-bottom:5px;">📞 Llamar a:</h3>
+            <a href="tel:1234567890" class="btn">📍 Monroe</a>
+            <a href="tel:1234567890" class="btn" style="opacity: 0.5;">📍 Broadway</a>
+            <a href="tel:1234567890" class="btn" style="opacity: 0.5;">📍 Village</a>
+            <button onclick="toggleMenu('menu-box')" class="back-link">Regresar al Menú Principal</button>
         </div>
     </div>
 
     <script>
-        function showLocations() {
-            document.getElementById('menu-box').style.display = 'none';
-            const locBox = document.getElementById('location-box');
-            locBox.style.display = 'flex';
-            setTimeout(() => { locBox.style.opacity = '1'; }, 50);
-        }
+        // Clean toggle function for all menus
+        function toggleMenu(targetId) {
+            // Hide all potential menus
+            const menus = ['menu-box', 'location-box', 'call-box'];
+            menus.forEach(id => {
+                document.getElementById(id).style.display = 'none';
+                document.getElementById(id).style.opacity = '0';
+            });
 
-        function showMainMenu() {
-            document.getElementById('location-box').style.display = 'none';
-            document.getElementById('location-box').style.opacity = '0';
-            document.getElementById('menu-box').style.display = 'flex';
+            // Show the target
+            const target = document.getElementById(targetId);
+            target.style.display = 'flex';
+            // Small delay for the fade-in effect
+            setTimeout(() => { target.style.opacity = '1'; }, 50);
         }
 
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
