@@ -156,18 +156,21 @@
     </div>
 
 <script>
-    // 1. Basic UI Logic
+    // 1. LANGUAGE & MENU LOGIC (This makes your buttons work)
     let currentLang = localStorage.getItem('appLang') || 'es';
+    
     function applyLanguage() {
         const elements = document.querySelectorAll('[data-es]');
         elements.forEach(el => { el.innerText = el.getAttribute(`data-${currentLang}`); });
         document.getElementById('lang-toggle').innerText = currentLang === 'es' ? 'EN / ES' : 'ES / EN';
     }
+
     function changeLanguage() {
         currentLang = currentLang === 'es' ? 'en' : 'es';
         localStorage.setItem('appLang', currentLang);
         applyLanguage();
     }
+
     function toggleMenu(targetId) {
         const menus = ['menu-box', 'location-box', 'call-box'];
         menus.forEach(id => {
@@ -179,29 +182,26 @@
         setTimeout(() => { target.style.opacity = '1'; }, 50);
     }
 
-    // 2. Detection Logic (iOS & Android)
+    // 2. INSTALL LOGIC (This is what we are troubleshooting)
     const installBtn = document.getElementById('installBtn');
     const iosBox = document.getElementById('ios-instructions');
     let deferredPrompt;
 
     window.addEventListener('load', () => {
-        const isStandalone = window.navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches;
+        // Simple Apple Check
         const isApple = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+        const isStandalone = window.navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches;
 
-        // iOS Specific: Show instructions if Apple and not installed
         if (isApple && !isStandalone) {
-            console.log("iOS detected: Showing instructions");
-            iosBox.style.display = 'block';
+            iosBox.style.display = 'block'; // Force show on iOS
         }
     });
 
-    // Android Specific: Listen for the "Installable" event from Chrome
+    // Android/Chrome logic
     window.addEventListener('beforeinstallprompt', (e) => {
-        console.log("Android Install Prompt ready!");
         e.preventDefault();
         deferredPrompt = e;
-        // Show the button
-        installBtn.style.display = 'block';
+        installBtn.style.display = 'block'; // Show the Install button on Android
     });
 
     installBtn.addEventListener('click', async () => {
@@ -213,14 +213,12 @@
         }
     });
 
-    // 3. Service Worker Registration (Required for Android Button)
+    // 3. SERVICE WORKER (The "engine" that makes it installable)
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('pwabuilder-sw.js')
-            .then(() => console.log("Service Worker Active"))
-            .catch(err => console.log("Service Worker Error", err));
+        navigator.serviceWorker.register('pwabuilder-sw.js');
     }
 
-    // 4. Header Animation
+    // 4. ANIMATIONS
     setTimeout(() => {
         document.getElementById('header').classList.add('moved');
         setTimeout(() => {
