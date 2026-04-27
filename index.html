@@ -155,7 +155,7 @@
         </div>
     </div>
 
-    <script>
+<script>
     // 1. Basic UI Logic
     let currentLang = localStorage.getItem('appLang') || 'es';
     function applyLanguage() {
@@ -179,24 +179,48 @@
         setTimeout(() => { target.style.opacity = '1'; }, 50);
     }
 
-    // 2. THE NEW iOS DETECTION
-    window.addEventListener('load', () => {
-        const iosBox = document.getElementById('ios-instructions');
-        
-        // Detect if it's any Apple mobile device
-        const isApple = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-        
-        // Detect if it's already installed (Standalone mode)
-        const isInstalled = window.navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches;
+    // 2. Detection Logic (iOS & Android)
+    const installBtn = document.getElementById('installBtn');
+    const iosBox = document.getElementById('ios-instructions');
+    let deferredPrompt;
 
-        // If it's Apple and NOT installed, FORCE it to show
-        if (isApple && !isInstalled) {
+    window.addEventListener('load', () => {
+        const isStandalone = window.navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches;
+        const isApple = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+        // iOS Specific: Show instructions if Apple and not installed
+        if (isApple && !isStandalone) {
+            console.log("iOS detected: Showing instructions");
             iosBox.style.display = 'block';
-            iosBox.style.opacity = '1'; // Added just in case
         }
     });
 
-    // 3. Header Animation
+    // Android Specific: Listen for the "Installable" event from Chrome
+    window.addEventListener('beforeinstallprompt', (e) => {
+        console.log("Android Install Prompt ready!");
+        e.preventDefault();
+        deferredPrompt = e;
+        // Show the button
+        installBtn.style.display = 'block';
+    });
+
+    installBtn.addEventListener('click', async () => {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            if (outcome === 'accepted') installBtn.style.display = 'none';
+            deferredPrompt = null;
+        }
+    });
+
+    // 3. Service Worker Registration (Required for Android Button)
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('pwabuilder-sw.js')
+            .then(() => console.log("Service Worker Active"))
+            .catch(err => console.log("Service Worker Error", err));
+    }
+
+    // 4. Header Animation
     setTimeout(() => {
         document.getElementById('header').classList.add('moved');
         setTimeout(() => {
