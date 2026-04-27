@@ -1,40 +1,52 @@
-// This is the "Network First" Service Worker
 const CACHE_NAME = "san-antonio-cache-v1";
 const ASSETS_TO_CACHE = [
-  "index.html",
-  "special.html",
-  "chicken-app.png",
-  "manifest.json"
+  "./",
+  "./index.html",
+  "./special.html",
+  "./chicken-app.png",
+  "./manifest.json"
 ];
 
-// Install event - caching the basic shell
+// Install event
 self.addEventListener("install", (event) => {
+  self.skipWaiting(); // Forces the new service worker to take over immediately
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ASSETS_TO_CACHE);
+      // Using map to cache files individually so one failure doesn't break everything
+      return Promise.allSettled(
+        ASSETS_TO_CACHE.map(url => cache.add(url))
+      );
     })
   );
 });
 
-// The "Magic" Fetch Logic: Network First, then Cache
+// Fetch logic
 self.addEventListener("fetch", (event) => {
+  // Only handle GET requests
+  if (event.request.method !== 'GET') return;
+
   event.respondWith(
     fetch(event.request)
       .then((response) => {
-        // If network works, put a copy in the cache and return it
-        return caches.open(CACHE_NAME).then((cache) => {
-          cache.put(event.request, response.clone());
-          return response;
+        const resClone = response.clone();
+        caches.open(CACHE_NAME).then((cache) => {
+          cache.put(event.request, resClone);
         });
+        return response;
       })
       .catch(() => {
-        // If network fails (no signal), check the cache
-        return caches.match(event.request);
+        return caches.match(event.request).then((cachedResponse) => {
+          if (cachedResponse) return cachedResponse;
+          // Fallback for the main page if everything fails
+          if (event.request.mode === 'navigate') {
+             return caches.match('./index.html');
+          }
+        });
       })
   );
 });
 
-// Activate event - clean up old caches
+// Activate event
 self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
