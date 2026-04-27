@@ -120,8 +120,13 @@
             <h2 id="questionText" data-es="¿Qué te gustaría hacer?" data-en="What would you like to do?">¿Qué te gustaría hacer?</h2>
         </div>
 
-        <div class="menu-container" id="menu-box">
-            <a href="special.html" class="btn btn-special" data-es="🔥 Ver Especial del Día" data-en="🔥 See Daily Special">🔥 Ver Especial del Día</a>
+      <div class="menu-container" id="menu-box">
+    <a href="special.html" class="btn btn-special" data-es="🔥 Ver Especial del Día" data-en="🔥 See Daily Special">🔥 Ver Especial del Día</a>
+    ```
+
+**Paste this new button right there:**
+```html
+<a href="#" class="btn" onclick="toggleMenu('view-menu-box')" data-es="📖 Ver Menú Digital" data-en="📖 View Digital Menu">📖 Ver Menú Digital</a>
             <a href="#" class="btn" onclick="toggleMenu('location-box')" data-es="🛍️ Ordena en Línea" data-en="🛍️ Order Online">🛍️ Ordena en Línea</a>
             <a href="https://my.flexgift.com/Account/Login" class="btn" data-es="💳 Mi Saldo de Regalo" data-en="💳 My Gift Balance">💳 Mi Saldo de Regalo</a>
             <a href="#" class="btn btn-call-main" onclick="toggleMenu('call-box')" data-es="📞 Llamar al Restaurante" data-en="📞 Call Restaurant">📞 Llamar al Restaurante</a>
@@ -153,6 +158,15 @@
             <a href="tel:9732726950" class="btn">📍 Village</a>
             <button onclick="toggleMenu('menu-box')" class="back-link" data-es="Regresar al Menú Principal" data-en="Back to Main Menu">Regresar al Menú Principal</button>
         </div>
+        <div class="menu-container" id="view-menu-box" style="display:none; opacity:0;">
+    <h3 style="text-align:center; margin-bottom:5px;" data-es="📖 Selecciona Ubicación:" data-en="📖 Select Location:">📖 Selecciona Ubicación:</h3>
+    
+    <a href="menu.html?loc=monroe" class="btn">📍 Monroe</a>
+    <a href="menu.html?loc=broadway" class="btn">📍 Broadway</a>
+    <a href="menu.html?loc=village" class="btn">📍 Village</a>
+    
+    <button onclick="toggleMenu('menu-box')" class="back-link" data-es="Regresar al Menú Principal" data-en="Back to Main Menu">Regresar al Menú Principal</button>
+</div>
     </div>
 
 <script>
