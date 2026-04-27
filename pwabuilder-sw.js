@@ -4,6 +4,8 @@ const ASSETS_TO_CACHE = [
   "./index.html",
   "./special.html",
   "./chicken-app.png",
+  "./barcode.png",
+  "./special.png",
   "./manifest.json"
 ];
 
