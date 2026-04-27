@@ -72,21 +72,17 @@
         }
         .menu-container.visible { opacity: 1; transform: translateY(0); }
         
-        /* THE UPDATED BUTTON SEGMENT */
         .btn {
             background-color: white; color: #800000; border: none;
             padding: 16px; border-radius: 12px; font-size: 16px; font-weight: bold;
             text-align: center; text-decoration: none;
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
             display: block;
-            
-            /* Animation for the "Alive" feel */
             transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.1s ease;
             cursor: pointer;
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* The "Pressed" Effect */
         .btn:active {
             transform: scale(0.96); 
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
@@ -145,8 +141,8 @@
         <div class="menu-container" id="location-box" style="display:none; opacity:0;">
             <h3 style="text-align:center; margin-bottom:5px;" data-es="🛍️ Ordenar Online:" data-en="🛍️ Order Online:">🛍️ Ordenar Online:</h3>
             <a href="https://order.epipay.com/m4200000556620/en/WebOrder?STORE_CODE=MTAwMA==" target="_blank" class="btn">📍 Monroe</a>
-            <a href="#" class="btn" style="opacity: 0.5; pointer-events: none;">📍 Broadway</a>
-            <a href="#" class="btn" style="opacity: 0.5; pointer-events: none;">📍 Village</a>
+            <a href="https://order.epipay.com/m4200000556620/en/WebOrder?STORE_CODE=MTAwMQ==" target="_blank" class="btn">📍 Broadway</a>
+            <a href="https://order.epipay.com/m4200000556620/en/WebOrder?STORE_CODE=MTAwMg==" target="_blank" class="btn">📍 Village</a>
             <button onclick="toggleMenu('menu-box')" class="back-link" data-es="Regresar al Menú Principal" data-en="Back to Main Menu">Regresar al Menú Principal</button>
         </div>
 
@@ -187,7 +183,6 @@
             setTimeout(() => { target.style.opacity = '1'; }, 50);
         }
 
-        // Initialize language on load
         applyLanguage();
 
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
