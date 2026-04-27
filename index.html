@@ -156,51 +156,56 @@
     </div>
 
     <script>
-        let currentLang = localStorage.getItem('appLang') || 'es';
-
-        function applyLanguage() {
-            const elements = document.querySelectorAll('[data-es]');
-            elements.forEach(el => {
-                el.innerText = el.getAttribute(`data-${currentLang}`);
-            });
-            document.getElementById('lang-toggle').innerText = currentLang === 'es' ? 'EN / ES' : 'ES / EN';
-        }
-
-        function changeLanguage() {
-            currentLang = currentLang === 'es' ? 'en' : 'es';
-            localStorage.setItem('appLang', currentLang);
-            applyLanguage();
-        }
-
-        function toggleMenu(targetId) {
-            const menus = ['menu-box', 'location-box', 'call-box'];
-            menus.forEach(id => {
-                document.getElementById(id).style.display = 'none';
-                document.getElementById(id).style.opacity = '0';
-            });
-            const target = document.getElementById(targetId);
-            target.style.display = 'flex';
-            setTimeout(() => { target.style.opacity = '1'; }, 50);
-        }
-
+    // 1. Basic UI Logic
+    let currentLang = localStorage.getItem('appLang') || 'es';
+    function applyLanguage() {
+        const elements = document.querySelectorAll('[data-es]');
+        elements.forEach(el => { el.innerText = el.getAttribute(`data-${currentLang}`); });
+        document.getElementById('lang-toggle').innerText = currentLang === 'es' ? 'EN / ES' : 'ES / EN';
+    }
+    function changeLanguage() {
+        currentLang = currentLang === 'es' ? 'en' : 'es';
+        localStorage.setItem('appLang', currentLang);
         applyLanguage();
+    }
+    function toggleMenu(targetId) {
+        const menus = ['menu-box', 'location-box', 'call-box'];
+        menus.forEach(id => {
+            document.getElementById(id).style.display = 'none';
+            document.getElementById(id).style.opacity = '0';
+        });
+        const target = document.getElementById(targetId);
+        target.style.display = 'flex';
+        setTimeout(() => { target.style.opacity = '1'; }, 50);
+    }
 
-        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-        const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+    // 2. THE NEW iOS DETECTION
+    window.addEventListener('load', () => {
+        const iosBox = document.getElementById('ios-instructions');
+        
+        // Detect if it's any Apple mobile device
+        const isApple = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+        
+        // Detect if it's already installed (Standalone mode)
+        const isInstalled = window.navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches;
 
-        window.onload = () => {
-            setTimeout(() => {
-                document.getElementById('header').classList.add('moved');
-                setTimeout(() => {
-                    document.getElementById('menu-box').classList.add('visible');
-                    document.getElementById('questionText').style.opacity = '1';
-                }, 500);
-            }, 1200);
-        };
-
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('pwabuilder-sw.js');
+        // If it's Apple and NOT installed, FORCE it to show
+        if (isApple && !isInstalled) {
+            iosBox.style.display = 'block';
+            iosBox.style.opacity = '1'; // Added just in case
         }
-    </script>
+    });
+
+    // 3. Header Animation
+    setTimeout(() => {
+        document.getElementById('header').classList.add('moved');
+        setTimeout(() => {
+            document.getElementById('menu-box').classList.add('visible');
+            document.getElementById('questionText').style.opacity = '1';
+        }, 500);
+    }, 1200);
+
+    applyLanguage();
+</script>
 </body>
 </html>
