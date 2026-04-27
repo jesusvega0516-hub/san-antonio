@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu - San Antonio</title>
+    <style>
+        :root { --brand-red: #800000; --brand-gold: #FFD700; }
+        body { margin: 0; font-family: sans-serif; background: #f9f9f9; color: #333; }
+        
+        /* Header & Nav */
+        .menu-header { background: var(--brand-red); color: white; padding: 20px; text-align: center; position: sticky; top: 0; z-index: 100; }
+        .nav-scroller { display: flex; overflow-x: auto; background: white; padding: 10px; gap: 15px; border-bottom: 2px solid #ddd; position: sticky; top: 105px; z-index: 90; }
+        .nav-item { white-space: nowrap; font-weight: bold; color: var(--brand-red); text-decoration: none; font-size: 14px; }
+
+        /* Menu Items */
+        .category-section { padding: 20px 15px; }
+        .category-title { border-left: 5px solid var(--brand-gold); padding-left: 10px; margin-bottom: 20px; color: var(--brand-red); }
+        .menu-item { background: white; border-radius: 8px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; justify-content: space-between; }
+        .item-info { flex: 1; padding-right: 10px; }
+        .item-name { font-weight: bold; font-size: 1.1rem; margin: 0; }
+        .item-desc { font-size: 0.9rem; color: #666; margin: 5px 0; }
+        .item-price { font-weight: bold; color: var(--brand-red); font-size: 1.1rem; }
+
+        /* Location Tag for Village exclusives */
+        .exclusive-tag { font-size: 0.7rem; background: var(--brand-gold); color: #333; padding: 2px 6px; border-radius: 4px; margin-left: 5px; }
+        
+        #lang-switch { position: absolute; top: 15px; right: 15px; background: white; color: var(--brand-red); border: none; padding: 8px 12px; border-radius: 5px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="menu-header">
+    <h1 id="location-name">San Antonio</h1>
+    <button id="lang-switch" onclick="toggleLang()">EN / ES</button>
+</div>
+
+<div class="nav-scroller" id="category-nav">
+    </div>
+
+<div id="menu-container">
+    </div>
+
+<script>
+    let currentLang = 'es';
+    // Logic to detect location (e.g., menu.html?loc=village)
+    const urlParams = new URLSearchParams(window.location.search);
+    const userLoc = urlParams.get('loc') || 'monroe'; 
+
+    const menuData = [
+        {
+            category: { es: "Entradas", en: "Appetizers" },
+            items: [
+                {
+                    name: { es: "Ceviche Mixto", en: "Mixed Ceviche" },
+                    desc: { es: "Pescado y mariscos marinados en limón", en: "Fish and seafood marinated in lime" },
+                    price: "15.99",
+                    exclusive: false
+                },
+                {
+                    name: { es: "Especial del Village", en: "Village Special" },
+                    desc: { es: "Plato exclusivo de esta locación", en: "Exclusive dish for this location" },
+                    price: "18.99",
+                    exclusive: "village" // This item ONLY shows if loc=village
+                }
+            ]
+        }
+    ];
+
+    function renderMenu() {
+        const container = document.getElementById('menu-container');
+        const nav = document.getElementById('category-nav');
+        container.innerHTML = '';
+        nav.innerHTML = '';
+
+        menuData.forEach(cat => {
+            // Filter items by location
+            const itemsToShow = cat.items.filter(item => !item.exclusive || item.exclusive === userLoc);
+
+            if (itemsToShow.length > 0) {
+                // Add Nav Item
+                nav.innerHTML += `<a href="#${cat.category.en}" class="nav-item">${cat.category[currentLang]}</a>`;
+
+                // Add Section
+                let sectionHTML = `<section class="category-section" id="${cat.category.en}">
+                    <h2 class="category-title">${cat.category[currentLang]}</h2>`;
+                
+                itemsToShow.forEach(item => {
+                    sectionHTML += `
+                        <div class="menu-item">
+                            <div class="item-info">
+                                <p class="item-name">${item.name[currentLang]} ${item.exclusive ? '<span class="exclusive-tag">Village Only</span>' : ''}</p>
+                                <p class="item-desc">${item.desc[currentLang]}</p>
+                            </div>
+                            <div class="item-price">$${item.price}</div>
+                        </div>`;
+                });
+                sectionHTML += `</section>`;
+                container.innerHTML += sectionHTML;
+            }
+        });
+    }
+
+    function toggleLang() {
+        currentLang = currentLang === 'es' ? 'en' : 'es';
+        renderMenu();
+    }
+
+    renderMenu();
+</script>
+
+</body>
+</html>
