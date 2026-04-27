@@ -17,7 +17,6 @@
             position: fixed;
         }
 
-        /* Language Toggle Button */
         #lang-toggle {
             position: absolute;
             top: 20px;
@@ -120,13 +119,10 @@
             <h2 id="questionText" data-es="¿Qué te gustaría hacer?" data-en="What would you like to do?">¿Qué te gustaría hacer?</h2>
         </div>
 
-      <div class="menu-container" id="menu-box">
-    <a href="special.html" class="btn btn-special" data-es="🔥 Ver Especial del Día" data-en="🔥 See Daily Special">🔥 Ver Especial del Día</a>
-    ```
-
-**Paste this new button right there:**
-```html
-<a href="#" class="btn" onclick="toggleMenu('view-menu-box')" data-es="📖 Ver Menú Digital" data-en="📖 View Digital Menu">📖 Ver Menú Digital</a>
+        <!-- Main Menu -->
+        <div class="menu-container" id="menu-box">
+            <a href="special.html" class="btn btn-special" data-es="🔥 Ver Especial del Día" data-en="🔥 See Daily Special">🔥 Ver Especial del Día</a>
+            <a href="#" class="btn" onclick="toggleMenu('view-menu-box')" data-es="📖 Ver Menú Digital" data-en="📖 View Digital Menu">📖 Ver Menú Digital</a>
             <a href="#" class="btn" onclick="toggleMenu('location-box')" data-es="🛍️ Ordena en Línea" data-en="🛍️ Order Online">🛍️ Ordena en Línea</a>
             <a href="https://my.flexgift.com/Account/Login" class="btn" data-es="💳 Mi Saldo de Regalo" data-en="💳 My Gift Balance">💳 Mi Saldo de Regalo</a>
             <a href="#" class="btn btn-call-main" onclick="toggleMenu('call-box')" data-es="📞 Llamar al Restaurante" data-en="📞 Call Restaurant">📞 Llamar al Restaurante</a>
@@ -143,6 +139,7 @@
             </div>
         </div>
 
+        <!-- Order Online Selection -->
         <div class="menu-container" id="location-box" style="display:none; opacity:0;">
             <h3 style="text-align:center; margin-bottom:5px;" data-es="🛍️ Ordenar Online:" data-en="🛍️ Order Online:">🛍️ Ordenar Online:</h3>
             <a href="https://order.epipay.com/m4200000556620/en/WebOrder?STORE_CODE=MTAwMA==" target="_blank" class="btn">📍 Monroe</a>
@@ -151,6 +148,7 @@
             <button onclick="toggleMenu('menu-box')" class="back-link" data-es="Regresar al Menú Principal" data-en="Back to Main Menu">Regresar al Menú Principal</button>
         </div>
 
+        <!-- Call Selection -->
         <div class="menu-container" id="call-box" style="display:none; opacity:0;">
             <h3 style="text-align:center; margin-bottom:5px;" data-es="📞 Llamar a:" data-en="📞 Call:">📞 Llamar a:</h3>
             <a href="tel:9736149666" class="btn">📍 Monroe</a>
@@ -158,19 +156,18 @@
             <a href="tel:9732726950" class="btn">📍 Village</a>
             <button onclick="toggleMenu('menu-box')" class="back-link" data-es="Regresar al Menú Principal" data-en="Back to Main Menu">Regresar al Menú Principal</button>
         </div>
+
+        <!-- View Menu Selection -->
         <div class="menu-container" id="view-menu-box" style="display:none; opacity:0;">
-    <h3 style="text-align:center; margin-bottom:5px;" data-es="📖 Selecciona Ubicación:" data-en="📖 Select Location:">📖 Selecciona Ubicación:</h3>
-    
-    <a href="menu.html?loc=monroe" class="btn">📍 Monroe</a>
-    <a href="menu.html?loc=broadway" class="btn">📍 Broadway</a>
-    <a href="menu.html?loc=village" class="btn">📍 Village</a>
-    
-    <button onclick="toggleMenu('menu-box')" class="back-link" data-es="Regresar al Menú Principal" data-en="Back to Main Menu">Regresar al Menú Principal</button>
-</div>
+            <h3 style="text-align:center; margin-bottom:5px;" data-es="📖 Selecciona Ubicación:" data-en="📖 Select Location:">📖 Selecciona Ubicación:</h3>
+            <a href="menu.html?loc=monroe" class="btn">📍 Monroe</a>
+            <a href="menu.html?loc=broadway" class="btn">📍 Broadway</a>
+            <a href="menu.html?loc=village" class="btn">📍 Village</a>
+            <button onclick="toggleMenu('menu-box')" class="back-link" data-es="Regresar al Menú Principal" data-en="Back to Main Menu">Regresar al Menú Principal</button>
+        </div>
     </div>
 
 <script>
-    // 1. LANGUAGE & MENU LOGIC (This makes your buttons work)
     let currentLang = localStorage.getItem('appLang') || 'es';
     
     function applyLanguage() {
@@ -186,36 +183,39 @@
     }
 
     function toggleMenu(targetId) {
-        const menus = ['menu-box', 'location-box', 'call-box'];
+        const menus = ['menu-box', 'location-box', 'call-box', 'view-menu-box'];
         menus.forEach(id => {
-            document.getElementById(id).style.display = 'none';
-            document.getElementById(id).style.opacity = '0';
+            const el = document.getElementById(id);
+            if(el) {
+                el.style.display = 'none';
+                el.style.opacity = '0';
+            }
         });
         const target = document.getElementById(targetId);
-        target.style.display = 'flex';
-        setTimeout(() => { target.style.opacity = '1'; }, 50);
+        if(target) {
+            target.style.display = 'flex';
+            setTimeout(() => { target.style.opacity = '1'; }, 50);
+        }
     }
 
-    // 2. INSTALL LOGIC (This is what we are troubleshooting)
     const installBtn = document.getElementById('installBtn');
     const iosBox = document.getElementById('ios-instructions');
     let deferredPrompt;
 
     window.addEventListener('load', () => {
-        // Simple Apple Check
-        const isApple = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+        const isApple = /iPhone|iPad|iPod/i.test(navigator.userAgent) || 
+                        (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
         const isStandalone = window.navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches;
 
         if (isApple && !isStandalone) {
-            iosBox.style.display = 'block'; // Force show on iOS
+            iosBox.style.display = 'block';
         }
     });
 
-    // Android/Chrome logic
     window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
         deferredPrompt = e;
-        installBtn.style.display = 'block'; // Show the Install button on Android
+        installBtn.style.display = 'block';
     });
 
     installBtn.addEventListener('click', async () => {
@@ -227,12 +227,11 @@
         }
     });
 
-    // 3. SERVICE WORKER (The "engine" that makes it installable)
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('pwabuilder-sw.js');
+    // Guard against registering Service Worker on blob/unsupported protocols during local testing
+    if ('serviceWorker' in navigator && window.location.protocol.startsWith('http')) {
+        navigator.serviceWorker.register('pwabuilder-sw.js').catch(err => console.log("SW registration skipped or failed."));
     }
 
-    // 4. ANIMATIONS
     setTimeout(() => {
         document.getElementById('header').classList.add('moved');
         setTimeout(() => {
